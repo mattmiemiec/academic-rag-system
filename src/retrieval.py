@@ -1,6 +1,7 @@
 """Retrieval module for semantic search and document ranking."""
 
 import logging
+import time
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 from .embeddings import EmbeddingManager
@@ -69,6 +70,35 @@ class SemanticRetriever(RetrieverBase):
 
         logger.info(f"Retrieved {len(results)} documents")
         return results
+
+    def retrieve_with_stats(self, query: str, k: int = 5) -> Tuple[List[Dict], Dict]:
+        """
+        Retrieve documents and return statistics.
+
+        Args:
+            query: Query text
+            k: Number of results to return
+
+        Returns:
+            Tuple of (results list, statistics dictionary)
+        """
+        start_time = time.time()
+
+        results = self.retrieve(query, k=k)
+
+        # Calculate statistics
+        unique_sources = set(r['source'] for r in results)
+        avg_similarity = sum(r['similarity_score'] for r in results) / len(results) if results else 0.0
+        retrieval_time_ms = (time.time() - start_time) * 1000
+
+        stats = {
+            "num_retrieved": len(results),
+            "num_unique_sources": len(unique_sources),
+            "avg_similarity_score": avg_similarity,
+            "retrieval_time_ms": retrieval_time_ms
+        }
+
+        return results, stats
 
     def retrieve_by_source(self, query: str, k: int = 5, unique_sources: bool = True) -> List[Dict]:
         """

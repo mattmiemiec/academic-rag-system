@@ -178,48 +178,95 @@ class ExplanationGenerator:
 
 
 def main():
-    """Test the generation module."""
+    """Test the generation module with formatted output."""
     from pathlib import Path
     from .retrieval import get_retriever
+    from .output_formatter import OutputFormatter
 
     # Setup
     base_dir = Path(__file__).parent.parent
     chroma_path = base_dir / "chroma_db"
 
-    # Initialize retriever and generator
+    # Initialize components
     retriever = get_retriever("semantic", str(chroma_path))
     generator = ExplanationGenerator()
+    formatter = OutputFormatter(use_colors=True)
 
     # Test query
     test_query = "machine learning for document classification"
 
-    print("\n" + "="*60)
-    print(f"TEST QUERY: {test_query}")
-    print("="*60 + "\n")
+    print(formatter.format_query_info(test_query))
 
-    # Retrieve documents
-    print("Retrieving relevant documents...")
-    documents = retriever.retrieve(test_query, k=3)
+    # Retrieve documents with statistics
+    print(formatter.format_progress(0, 100, "Retrieving documents"))
+    documents, stats = retriever.retrieve_with_stats(test_query, k=3)
+    print(f"\r{formatter.format_progress(100, 100, 'Retrieving documents')}")
 
-    print(f"\nRetrieved {len(documents)} documents:")
-    for i, doc in enumerate(documents, 1):
-        print(f"  {i}. {doc['source']} (similarity: {doc['similarity_score']:.3f})")
+    print(formatter.format_retrieval_stats(stats))
 
     # Generate explanation
-    print("\nGenerating explanation...\n")
+    print(formatter.format_progress(0, 100, "Generating explanation"))
     explanation = generator.generate(test_query, documents)
+    print(f"\r{formatter.format_progress(100, 100, 'Generating explanation')}\n")
 
-    print("\n" + "="*60)
-    print("GENERATED EXPLANATION:")
-    print("="*60 + "\n")
-    print(explanation)
+    # Display complete formatted output
+    complete_output = formatter.format_complete_result(
+        query=test_query,
+        documents=documents,
+        explanation=explanation,
+        stats=stats,
+        show_document_text=True
+    )
+    print(complete_output)
 
-    print("\n" + "="*60)
-    print("\nTesting simple generation...")
-    print("="*60 + "\n")
+    # Test summary format
+    print("\n" + "="*80)
+    print("TESTING SUMMARY FORMAT")
+    print("="*80 + "\n")
 
-    simple_explanation = generator.generate_simple(test_query, documents)
-    print(simple_explanation)
+    summary = formatter.format_summary(
+        query=test_query,
+        num_documents=len(documents),
+        top_sources=[doc['source'] for doc in documents],
+        key_findings="Retrieved papers focus on machine learning approaches to document classification."
+    )
+    print(summary)
+
+    # Test JSON export
+    print("\n" + "="*80)
+    print("TESTING JSON EXPORT")
+    print("="*80 + "\n")
+
+    json_output = formatter.to_json(test_query, documents, explanation, stats)
+    print(json_output[:500] + "...\n")  # Show first 500 chars
+
+    # Save outputs to files
+    output_dir = base_dir / "outputs"
+    output_dir.mkdir(exist_ok=True)
+
+    # Save text version
+    text_file = output_dir / "sample_output.txt"
+    if formatter.save_to_file(complete_output, text_file, "txt"):
+        print(formatter.format_success(f"Saved text output to {text_file}"))
+
+    # Save JSON version
+    json_file = output_dir / "sample_output.json"
+    if formatter.save_to_file(json_output, json_file, "json"):
+        print(formatter.format_success(f"Saved JSON output to {json_file}"))
+
+    # Save Markdown version
+    from .output_formatter import MarkdownFormatter
+    md_formatter = MarkdownFormatter()
+    md_output = md_formatter.format_complete_result(
+        query=test_query,
+        documents=documents,
+        explanation=explanation,
+        stats=stats,
+        show_document_text=True
+    )
+    md_file = output_dir / "sample_output.md"
+    if md_formatter.save_to_file(md_output, md_file, "md"):
+        print(formatter.format_success(f"Saved Markdown output to {md_file}"))
 
 
 if __name__ == "__main__":

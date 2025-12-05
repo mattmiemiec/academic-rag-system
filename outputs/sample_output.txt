@@ -1,0 +1,49 @@
+
+[1m[94m================================================================================[0m
+[1mSEARCH QUERY[0m
+[94m================================================================================[0m
+[1mQuery:[0m machine learning for document classification
+[1mTime:[0m 2025-12-05 16:49:24
+
+[1m[96mRETRIEVAL STATISTICS[0m
+--------------------------------------------------------------------------------
+[92m✓[0m Retrieved: 3 chunks from 3 unique papers
+[92m✓[0m Average Similarity: 0.359
+[92m✓[0m Retrieval Time: 200.09ms
+
+[1m[96mRETRIEVED DOCUMENTS (3)[0m
+--------------------------------------------------------------------------------
+
+[1m[1] 2509.24294v1.pdf[0m
+    Similarity: [91m0.389[0m
+    Excerpt: credential handling errors •C21:Misuse or incorrect assumptions about external APIs •C22:Mishandling of complex data structures and relationships •C23:Exception handling and reporting deficiencies •C2...
+
+[1m[2] 2509.01514v1.pdf[0m
+    Similarity: [91m0.345[0m
+    Excerpt: [24]. Although it does effectively minimize irrelevant con- textual features, its stringent filtering process can result in over-filtering for some query-document pairs [9]. This indicates that an adj...
+
+[1m[3] 2509.14662v1.pdf[0m
+    Similarity: [91m0.344[0m
+    Excerpt: 70%) and testing ( 30%) subsets, and finetune BERT-level models, includ- ing BERT (Devlin et al., 2019) and RoBERTa (Liu et al., 2019). In addition, to investigate how pow- erful embeddings help the t...
+
+[1m[96mRELEVANCE ANALYSIS[0m
+--------------------------------------------------------------------------------
+
+[Paper 1 - 2509.24294v1.pdf]
+Relevance: Moderately Relevant
+Explanation: Although this paper does not directly focus on machine learning for document classification, it discusses the importance of improving a distilled classifier's performance to construct high-quality and consistent graphs. This relates to the research question since machine learning techniques are essential in developing such classifiers.
+Key Concepts: distilled classifier, graph construction, performance improvement
+
+[Paper 2 - 2509.01514v1.pdf]
+Relevance: Moderately Relevant
+Explanation: This paper examines a method to minimize irrelevant contextual features in document classification while addressing the risk of over-filtering some query-document pairs. The study suggests adjusting thresholds or applying domain-based cross-encoders, which are relevant techniques for improving machine learning models used in document classification tasks.
+Key Concepts: document-level relevance, filtering, contextual features, threshold adjustment, domain-based cross-encoder
+
+[Paper 3 - 2509.14662v1.pdf]
+Relevance: Highly Relevant
+Explanation: This paper investigates the application of various machine learning models and techniques for document classification. The authors compare different pre-trained language models, fine-tuning methods, and embedding models to improve classification accuracy. These are central topics in the research question, making this paper directly relevant.
+Key Concepts: machine learning models, pre-trained language models, fine-tuning, embedding models, classification accuracy
+
+[1m[94m--------------------------------------------------------------------------------[0m
+[1mEND OF RESULTS[0m
+[94m--------------------------------------------------------------------------------[0m
