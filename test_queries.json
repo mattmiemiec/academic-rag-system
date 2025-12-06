@@ -1,0 +1,80 @@
+{
+  "test_queries": [
+    {
+      "query": "graph neural networks for node classification",
+      "relevant_docs": [
+        "2509.07123v1.pdf",
+        "2509.08418v1.pdf",
+        "2509.23577v1.pdf"
+      ],
+      "description": "Papers about GNNs, graph analysis, and node classification tasks"
+    },
+    {
+      "query": "medical image segmentation using deep learning",
+      "relevant_docs": [
+        "2509.23672v1.pdf",
+        "2509.11752v1.pdf",
+        "2509.23741v1.pdf"
+      ],
+      "description": "Papers on medical imaging, segmentation, and deep learning for medical applications"
+    },
+    {
+      "query": "natural language processing with transformers",
+      "relevant_docs": [
+        "2509.08438v1.pdf",
+        "2509.24294v1.pdf",
+        "2509.03972v1.pdf",
+        "2509.20617v1.pdf",
+        "2509.03937v1.pdf"
+      ],
+      "description": "Papers on NLP, transformers, language models, and text processing"
+    },
+    {
+      "query": "deep learning optimization algorithms",
+      "relevant_docs": [
+        "2509.21653v1.pdf",
+        "2509.18505v1.pdf"
+      ],
+      "description": "Papers focusing on optimization techniques for deep learning"
+    },
+    {
+      "query": "computer vision object detection",
+      "relevant_docs": [
+        "2509.13388v2.pdf",
+        "2509.00056v2.pdf",
+        "2509.00045v1.pdf"
+      ],
+      "description": "Papers on computer vision tasks including object detection and recognition"
+    },
+    {
+      "query": "reinforcement learning and decision making",
+      "relevant_docs": [
+        "2509.07150v1.pdf"
+      ],
+      "description": "Papers on RL algorithms and decision-making systems"
+    },
+    {
+      "query": "recommendation systems and collaborative filtering",
+      "relevant_docs": [
+        "2509.08736v1.pdf",
+        "2509.07123v1.pdf",
+        "2509.01514v1.pdf"
+      ],
+      "description": "Papers on recommender systems, collaborative filtering, and personalization"
+    },
+    {
+      "query": "cybersecurity threat detection",
+      "relevant_docs": [
+        "2509.11633v1.pdf",
+        "2509.24173v1.pdf"
+      ],
+      "description": "Papers on security, threat detection, and anomaly detection"
+    }
+  ],
+  "metadata": {
+    "created": "2025-12-06",
+    "total_queries": 8,
+    "description": "Ground truth test queries for RAG system evaluation",
+    "notes": "Relevant documents were identified through manual inspection of retrieval results and content verification"
+  }
+}
