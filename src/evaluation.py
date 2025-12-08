@@ -211,17 +211,22 @@ class MetricsCalculator:
 class Evaluator:
     """Evaluator for RAG system performance."""
 
-    def __init__(self, retriever: SemanticRetriever, k_values: List[int] = None):
+    def __init__(self, retriever: SemanticRetriever, k_values: List[int] = None,
+                 deduplicate: bool = False, min_similarity: float = 0.0):
         """
         Initialize evaluator.
 
         Args:
             retriever: Retriever instance to evaluate
             k_values: List of K values to evaluate at (default: [1, 3, 5, 10])
+            deduplicate: If True, deduplicate results by source document
+            min_similarity: Minimum similarity score threshold (0.0 to 1.0)
         """
         self.retriever = retriever
         self.k_values = k_values or [1, 3, 5, 10]
         self.calculator = MetricsCalculator()
+        self.deduplicate = deduplicate
+        self.min_similarity = min_similarity
 
     def evaluate_query(self, query: str, relevant_docs: Set[str],
                       k_max: int = 10,
@@ -238,8 +243,16 @@ class Evaluator:
         Returns:
             QueryResult with metrics
         """
-        # Retrieve documents
-        results = self.retriever.retrieve(query, k=k_max)
+        # Retrieve documents with optional deduplication
+        if self.deduplicate:
+            results = self.retriever.retrieve_by_source(query, k=k_max, unique_sources=True)
+        else:
+            results = self.retriever.retrieve(query, k=k_max)
+
+        # Apply minimum similarity threshold if specified
+        if self.min_similarity > 0.0:
+            results = [r for r in results if r['similarity_score'] >= self.min_similarity]
+
         retrieved_docs = [r['source'] for r in results]
 
         # Calculate metrics at different K values

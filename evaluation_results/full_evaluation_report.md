@@ -1,6 +1,6 @@
 # RAG System Evaluation Report
 
-**Generated:** 2025-12-06 16:20:35
+**Generated:** 2025-12-08 16:58:34
 
 **Number of Queries:** 8
 
