@@ -62,10 +62,10 @@ class RAGCli:
         """Display welcome message."""
         welcome = """
 ╔══════════════════════════════════════════════════════════════════╗
-║          Academic RAG System - Interactive CLI                   ║
+║         Academic RAG System - Interactive CLI                    ║
 ║                                                                  ║
-║  Query 75 academic papers using semantic search and AI          ║
-║  Model: Mixtral 8x7b | Embeddings: all-MiniLM-L6-v2            ║
+║  Query 75 academic papers using semantic search and AI           ║
+║  Model: Mixtral 8x7b | Embeddings: all-MiniLM-L6-v2              ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 Available Commands:

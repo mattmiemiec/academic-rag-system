@@ -43,8 +43,27 @@ class OutputFormatter:
             use_colors: Whether to use ANSI colors in output
         """
         self.use_colors = use_colors
-        if not use_colors:
-            Colors.disable()
+        # Create instance-specific color codes
+        if use_colors:
+            self.HEADER = '\033[95m'
+            self.BLUE = '\033[94m'
+            self.CYAN = '\033[96m'
+            self.GREEN = '\033[92m'
+            self.YELLOW = '\033[93m'
+            self.RED = '\033[91m'
+            self.BOLD = '\033[1m'
+            self.UNDERLINE = '\033[4m'
+            self.END = '\033[0m'
+        else:
+            self.HEADER = ''
+            self.BLUE = ''
+            self.CYAN = ''
+            self.GREEN = ''
+            self.YELLOW = ''
+            self.RED = ''
+            self.BOLD = ''
+            self.UNDERLINE = ''
+            self.END = ''
 
     def format_header(self, text: str, char: str = "=") -> str:
         """
@@ -58,7 +77,7 @@ class OutputFormatter:
             Formatted header string
         """
         line = char * 80
-        return f"\n{Colors.BOLD}{Colors.BLUE}{line}{Colors.END}\n{Colors.BOLD}{text}{Colors.END}\n{Colors.BLUE}{line}{Colors.END}\n"
+        return f"\n{self.BOLD}{self.BLUE}{line}{self.END}\n{self.BOLD}{text}{self.END}\n{self.BLUE}{line}{self.END}\n"
 
     def format_subheader(self, text: str) -> str:
         """
@@ -70,7 +89,7 @@ class OutputFormatter:
         Returns:
             Formatted subheader string
         """
-        return f"\n{Colors.BOLD}{Colors.CYAN}{text}{Colors.END}\n{'-' * 80}\n"
+        return f"\n{self.BOLD}{self.CYAN}{text}{self.END}\n{'-' * 80}\n"
 
     def format_query_info(self, query: str, timestamp: Optional[str] = None) -> str:
         """
@@ -87,8 +106,8 @@ class OutputFormatter:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         output = self.format_header("SEARCH QUERY")
-        output += f"{Colors.BOLD}Query:{Colors.END} {query}\n"
-        output += f"{Colors.BOLD}Time:{Colors.END} {timestamp}\n"
+        output += f"{self.BOLD}Query:{self.END} {query}\n"
+        output += f"{self.BOLD}Time:{self.END} {timestamp}\n"
         return output
 
     def format_retrieval_stats(self, stats: Dict) -> str:
@@ -108,9 +127,9 @@ class OutputFormatter:
         avg_score = stats.get('avg_similarity_score', 0.0)
         retrieval_time = stats.get('retrieval_time_ms', 0)
 
-        output += f"{Colors.GREEN}✓{Colors.END} Retrieved: {num_retrieved} chunks from {num_sources} unique papers\n"
-        output += f"{Colors.GREEN}✓{Colors.END} Average Similarity: {avg_score:.3f}\n"
-        output += f"{Colors.GREEN}✓{Colors.END} Retrieval Time: {retrieval_time:.2f}ms\n"
+        output += f"{self.GREEN}✓{self.END} Retrieved: {num_retrieved} chunks from {num_sources} unique papers\n"
+        output += f"{self.GREEN}✓{self.END} Average Similarity: {avg_score:.3f}\n"
+        output += f"{self.GREEN}✓{self.END} Retrieval Time: {retrieval_time:.2f}ms\n"
 
         return output
 
@@ -132,14 +151,14 @@ class OutputFormatter:
 
         # Color-code similarity score
         if similarity >= 0.8:
-            score_color = Colors.GREEN
+            score_color = self.GREEN
         elif similarity >= 0.6:
-            score_color = Colors.YELLOW
+            score_color = self.YELLOW
         else:
-            score_color = Colors.RED
+            score_color = self.RED
 
-        output = f"\n{Colors.BOLD}[{index}] {source}{Colors.END}\n"
-        output += f"    Similarity: {score_color}{similarity:.3f}{Colors.END}\n"
+        output = f"\n{self.BOLD}[{index}] {source}{self.END}\n"
+        output += f"    Similarity: {score_color}{similarity:.3f}{self.END}\n"
 
         if show_text and text:
             # Show first 200 characters of text
@@ -233,15 +252,15 @@ class OutputFormatter:
             Formatted summary string
         """
         output = self.format_header("SEARCH SUMMARY")
-        output += f"{Colors.BOLD}Query:{Colors.END} {query}\n"
-        output += f"{Colors.BOLD}Documents Found:{Colors.END} {num_documents}\n\n"
+        output += f"{self.BOLD}Query:{self.END} {query}\n"
+        output += f"{self.BOLD}Documents Found:{self.END} {num_documents}\n\n"
 
-        output += f"{Colors.BOLD}Top Sources:{Colors.END}\n"
+        output += f"{self.BOLD}Top Sources:{self.END}\n"
         for i, source in enumerate(top_sources[:5], 1):
             output += f"  {i}. {source}\n"
 
         if key_findings:
-            output += f"\n{Colors.BOLD}Key Findings:{Colors.END}\n{key_findings}\n"
+            output += f"\n{self.BOLD}Key Findings:{self.END}\n{key_findings}\n"
 
         return output
 
@@ -256,7 +275,7 @@ class OutputFormatter:
         Returns:
             Formatted error string
         """
-        return f"\n{Colors.RED}{Colors.BOLD}[{error_type}]{Colors.END} {error_message}\n"
+        return f"\n{self.RED}{self.BOLD}[{error_type}]{self.END} {error_message}\n"
 
     def format_success(self, message: str) -> str:
         """
@@ -268,7 +287,7 @@ class OutputFormatter:
         Returns:
             Formatted success string
         """
-        return f"{Colors.GREEN}{Colors.BOLD}✓{Colors.END} {message}\n"
+        return f"{self.GREEN}{self.BOLD}✓{self.END} {message}\n"
 
     def format_progress(self, current: int, total: int, task: str) -> str:
         """
@@ -287,7 +306,19 @@ class OutputFormatter:
         filled = int(bar_length * current / total) if total > 0 else 0
         bar = "█" * filled + "░" * (bar_length - filled)
 
-        return f"{Colors.CYAN}{task}:{Colors.END} [{bar}] {current}/{total} ({percentage:.1f}%)"
+        return f"{self.CYAN}{task}:{self.END} [{bar}] {current}/{total} ({percentage:.1f}%)"
+
+    def format_query_prompt(self, prompt: str) -> str:
+        """
+        Format an input prompt for the CLI.
+
+        Args:
+            prompt: The prompt text to display
+
+        Returns:
+            Formatted prompt string
+        """
+        return f"{self.BOLD}{self.CYAN}{prompt}{self.END} "
 
     def to_json(
         self,
